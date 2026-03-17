@@ -79,7 +79,12 @@ const Index = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
-            <VideoPlayer videoTitle={activeVideo.title} moduleTitle={activeModuleTitle} />
+            <VideoPlayer
+              videoTitle={activeVideo.title}
+              moduleTitle={activeModuleTitle}
+              youtubeUrl={activeVideo.youtubeUrl}
+              onYoutubeUrlChange={handleYoutubeUrlChange}
+            />
 
             {/* Video Info */}
             <div className="mt-6">
