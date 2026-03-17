@@ -151,7 +151,7 @@ const Index = () => {
           {/* Module List */}
           <div className="flex-1 overflow-y-auto scrollbar-hide p-2">
             <ModuleSidebar
-              modules={modulesData}
+              modules={modules}
               activeVideoId={activeVideo.id}
               onVideoSelect={handleVideoSelect}
               filter={filter}
