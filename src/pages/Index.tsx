@@ -3,11 +3,12 @@ import { Search, Menu, X, BookOpen, TrendingUp } from "lucide-react";
 import { useState } from "react";
 import VideoPlayer from "@/components/VideoPlayer";
 import ModuleSidebar from "@/components/ModuleSidebar";
-import { modulesData, type Video } from "@/data/modules";
+import { modulesData as initialModules, type Video } from "@/data/modules";
 
 const Index = () => {
-  const [activeVideo, setActiveVideo] = useState<Video>(modulesData[0].videos[0]);
-  const [activeModuleTitle, setActiveModuleTitle] = useState(modulesData[0].title);
+  const [modules, setModules] = useState(initialModules);
+  const [activeVideo, setActiveVideo] = useState<Video>(modules[0].videos[0]);
+  const [activeModuleTitle, setActiveModuleTitle] = useState(modules[0].title);
   const [filter, setFilter] = useState<"all" | "Beginner" | "Advanced">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -18,8 +19,20 @@ const Index = () => {
     setSidebarOpen(false);
   };
 
-  const totalVideos = modulesData.reduce((sum, m) => sum + m.videos.length, 0);
-  const completedVideos = modulesData.reduce(
+  const handleYoutubeUrlChange = (url: string) => {
+    setModules((prev) =>
+      prev.map((mod) => ({
+        ...mod,
+        videos: mod.videos.map((v) =>
+          v.id === activeVideo.id ? { ...v, youtubeUrl: url } : v
+        ),
+      }))
+    );
+    setActiveVideo((prev) => ({ ...prev, youtubeUrl: url }));
+  };
+
+  const totalVideos = modules.reduce((sum, m) => sum + m.videos.length, 0);
+  const completedVideos = modules.reduce(
     (sum, m) => sum + m.videos.filter((v) => v.completed).length, 0
   );
   const overallProgress = Math.round((completedVideos / totalVideos) * 100);
@@ -66,7 +79,12 @@ const Index = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
-            <VideoPlayer videoTitle={activeVideo.title} moduleTitle={activeModuleTitle} />
+            <VideoPlayer
+              videoTitle={activeVideo.title}
+              moduleTitle={activeModuleTitle}
+              youtubeUrl={activeVideo.youtubeUrl}
+              onYoutubeUrlChange={handleYoutubeUrlChange}
+            />
 
             {/* Video Info */}
             <div className="mt-6">
@@ -133,7 +151,7 @@ const Index = () => {
           {/* Module List */}
           <div className="flex-1 overflow-y-auto scrollbar-hide p-2">
             <ModuleSidebar
-              modules={modulesData}
+              modules={modules}
               activeVideoId={activeVideo.id}
               onVideoSelect={handleVideoSelect}
               filter={filter}
