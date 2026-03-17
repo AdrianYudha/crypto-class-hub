@@ -3,6 +3,7 @@ export interface Video {
   title: string;
   duration: string;
   completed: boolean;
+  youtubeUrl?: string;
 }
 
 export interface Module {
