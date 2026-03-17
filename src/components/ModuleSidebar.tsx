@@ -3,7 +3,7 @@ import { ChevronDown, Play, CheckCircle2, Clock } from "lucide-react";
 import { useState } from "react";
 import type { Module, Video } from "@/data/modules";
 
-const transition = { type: "spring", stiffness: 300, damping: 30 };
+const transition = { type: "spring" as const, stiffness: 300, damping: 30 };
 
 interface ModuleSidebarProps {
   modules: Module[];
